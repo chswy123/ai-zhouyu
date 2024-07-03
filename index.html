@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script>
+    // function saveData() {
+    //     res = utools.db.put({_id: "demo", data:"demo2"})
+    //     alert(res)
+    // }
+    
+    // function getData() {
+    //     res = utools.db.get("demo")
+    //     alert(res.data)
+    // }
+
+    function addOption(type) {
+        // if (type == 'lensLanguage') {
+        //     val = document.getElementsByName('lensLanguage')[0].value
+        //     res = utools.db.put({_id: "lensLanguage/" + val, data:val})
+        //     console.log(val, res)
+        //     document.getElementById('lensLanguage-detail').innerHTML = ''
+        //     initDetail()
+        // }
+        
+        val = document.getElementsByName(type)[0].value
+        res = utools.db.put({_id: type + "/" + val, data:val})
+        console.log(val, res)
+        document.getElementById(type + '-detail').innerHTML = ''
+        initDetail(type)
+    }
+    
+
+</script>
+<!-- <button onclick="saveData()">点击</button> -->
+
+<!-- <button onclick="getData()">获取</button> -->
+
+<div>
+    <div id="lensLanguage_a" class="category lensLanguage_a">
+        <h3 class="main-name">镜头语言：</h3>
+        <input type="text" name="lensLanguage_a" id="lensLanguage_a">
+        <button class="add-option" onclick="addOption('lensLanguage_a')">添加</button>
+        <div id="lensLanguage_a-detail"></div>
+    </div>
+    <hr/>
+
+    <div id="lighting" class="category lighting">
+        <h3 class="main-name">光影：</h3>
+        <input type="text" name="lighting" id="lighting">
+        <button class="add-option" onclick="addOption('lighting')">添加</button>
+        <div id="lighting-detail"></div>
+    </div>
+    <hr/>
+
+    <div id="subject" class="category subject">
+        <h3 class="main-name">主体 (主体描述)：</h3>
+        <input type="text" name="subject" id="subject">
+        <button class="add-option" onclick="addOption('subject')">添加</button>
+        <div id="subject-detail"></div>
+    </div>
+    <hr/>
+
+    <div id="action" class="category action">
+        <h3 class="main-name">主体运动：</h3>
+        <input type="text" name="action" id="action">
+        <button class="add-option" onclick="addOption('action')">添加</button>
+        <div id="action-detail"></div>
+    </div>
+    <hr/>
+
+    <div id="scene" class="category scene">
+        <h3 class="main-name">场景 (场景描述)：</h3>
+        <input type="text" name="scene" id="scene">
+        <button class="add-option" onclick="addOption('scene')">添加</button>
+        <div id="scene-detail"></div>
+    </div>
+    <hr/>
+
+    <div id="atmosphere" class="category atmosphere">
+        <h3 class="main-name">氛围：</h3>
+        <input type="text" name="atmosphere" id="atmosphere">
+        <button class="add-option" onclick="addOption('atmosphere')">添加</button>
+        <div id="atmosphere-detail"></div>
+    </div>
+    <hr/>
+</div>
+
+<div>
+    <h3 class="prompt-name">提示词：</h3>
+    <div id="prompt"></div>
+</div>
+
+</body>
+<script>
+    initDetail('lensLanguage_a')
+    initDetail('lighting')
+    initDetail('subject')
+    initDetail('action')
+    initDetail('scene')
+    initDetail('atmosphere')
+
+    function initDetail(type) {
+        res = utools.db.allDocs(type +"/")
+        // console.log('init-all', res)
+        for (let i = 0; i < res.length; i++) {
+            const element = res[i].data;
+            // var contentToInsert = "<span class='lensLanguage_a-each-tags' onclick='selectTag(\"" + element + "\")'>" + element + "</span>";
+            var contentToInsert = "<span class=\'" + type +  "-each-tags' onclick='selectTag(\"" + element + "\")'>" + element + "</span>";
+            console.log(contentToInsert)
+            document.getElementById(type + '-detail').innerHTML += contentToInsert
+        }
+    }
+
+    function selectTag(element) {
+        console.log('selectTag', element)
+        document.getElementById('prompt').innerHTML += element + '，'
+
+    }
+
+</script>
+
+<style>
+    .main-name{
+        color: rgb(206, 240, 17);
+    }
+    .prompt-name{
+        color: rgb(139, 21, 168)
+    }
+    #lensLanguage_a-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .lensLanguage_a-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #lighting-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .lighting-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #subject-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .subject-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #action-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .action-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #scene-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .scene-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #atmosphere-detail{
+        margin-top: 20px;
+        height: auto;
+    }
+    .atmosphere-each-tags {
+        color: aqua;
+        margin: 0 10px 10px 0;
+        padding: 1px 1px 1px 1px;
+        border: solid 1px aqua;
+        display: inline-block;
+        cursor: pointer;
+    }
+    #prompt{
+        margin-top: 20px;
+        color: rgb(6, 240, 76);
+    }
+</style>
+
+</html>

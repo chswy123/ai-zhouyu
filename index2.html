@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>拼接提示词</title>
+    <style>
+        .category {
+            color: aquamarine;
+            margin-bottom: 20px;
+        }
+        .tags {
+            color: yellow;
+        }
+        .option {
+            display: inline-block;
+            margin: 5px;
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+        .selected {
+            background-color: #ddd;
+        }
+        #result {
+            margin-top: 20px;
+        }
+        .add-option {
+            margin-top: 10px;
+        }
+    </style>
+    <script>
+        let options = {};
+
+        function toggleSelection(category, option) {
+            const element = document.getElementById(`${category}-${option}`);
+            element.classList.toggle('selected');
+            updateResult();
+        }
+
+        function updateResult() {
+            let result = '提示词 (Prompt) =';
+            for (const category in options) {
+                const selectedOptions = Array.from(document.querySelectorAll(`.category.${category} .selected`))
+                    .map(el => el.innerText)
+                    .join(', ');
+                result += ` ${selectedOptions} +`;
+            }
+            result = result.slice(0, -2); // Remove last ' +'
+            document.getElementById('result').innerText = result;
+        }
+
+        function loadOptions() {
+            fetch('options.json')
+                .then(response => response.json())
+                .then(data => {
+                    options = data;
+                    for (const category in options) {
+                        const container = document.getElementById(category);
+                        options[category].forEach(option => {
+                            const div = document.createElement('div');
+                            div.id = `${category}-${option}`;
+                            div.className = 'option';
+                            div.innerText = option;
+                            div.onclick = () => toggleSelection(category, option);
+                            container.appendChild(div);
+                        });
+                    }
+                });
+        }
+
+        function addOption(category) {
+            const newOption = prompt(`请输入新的${category}选项:`);
+            if (newOption) {
+                options[category].push(newOption);
+                const container = document.getElementById(category);
+                const div = document.createElement('div');
+                div.id = `${category}-${newOption}`;
+                div.className = 'option';
+                div.innerText = newOption;
+                div.onclick = () => toggleSelection(category, newOption);
+                container.appendChild(div);
+                saveOptions();
+            }
+        }
+
+        function saveOptions() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(options));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "options.json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        window.onload = loadOptions;
+    </script>
+</head>
+<body>
+    <div id="lensLanguage" class="category lensLanguage">
+        <h3>镜头语言222：</h3>
+        <!-- <button class="add-option" onclick="addOption('lensLanguage')">添加镜头语言选项</button> -->
+    </div>
+
+    <div id="lighting" class="category lighting">
+        <h3>光影：</h3>
+        <!-- <button class="add-option" onclick="addOption('lighting')">添加光影选项</button> -->
+    </div>
+
+    <div id="subject" class="category subject">
+        <h3>主体 (主体描述)：</h3>
+        <!-- <button class="add-option" onclick="addOption('subject')">添加主体选项</button> -->
+    </div>
+
+    <div id="action" class="category action">
+        <h3>主体运动：</h3>
+        <!-- <button class="add-option" onclick="addOption('action')">添加主体运动选项</button> -->
+    </div>
+
+    <div id="scene" class="category scene">
+        <h3>场景 (场景描述)：</h3>
+        <!-- <button class="add-option" onclick="addOption('scene')">添加场景选项</button> -->
+    </div>
+
+    <div id="atmosphere" class="category atmosphere">
+        <h3>氛围：</h3>
+        <!-- <button class="add-option" onclick="addOption('atmosphere')">添加氛围选项</button> -->
+    </div>
+
+    <div id="result">
+        提示词 (Prompt) = 
+    </div>
+
+    <button onclick="saveOptions()">保存选项</button>
+</body>
+</html>
