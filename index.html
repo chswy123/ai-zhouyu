@@ -28,7 +28,9 @@
             return;
         } else {
             let messageElement = document.getElementById(type + '-message');
-            messageElement.innerHTML = '';
+            if (messageElement) {
+                messageElement.innerHTML = '';
+            }
         }
         
         val = document.getElementsByName(type)[0].value
