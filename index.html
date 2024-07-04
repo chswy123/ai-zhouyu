@@ -20,12 +20,33 @@
         //     document.getElementById('lensLanguage-detail').innerHTML = ''
         //     initDetail()
         // }
+
+        val = document.getElementsByName(type)[0].value;
+        
+        if (!val.trim()) {
+            displayMessage(type, '输入不能为空');
+            return;
+        } else {
+            let messageElement = document.getElementById(type + '-message');
+            messageElement.innerHTML = '';
+        }
         
         val = document.getElementsByName(type)[0].value
         res = utools.db.put({_id: type + "/" + val, data:val})
         console.log(val, res)
         document.getElementById(type + '-detail').innerHTML = ''
         initDetail(type)
+    }
+
+    function displayMessage(type, message) {
+        let messageElement = document.getElementById(type + '-message');
+        if (!messageElement) {
+            messageElement = document.createElement('div');
+            messageElement.id = type + '-message';
+            messageElement.style.color = 'red';
+            document.querySelector(`#${type} .add-button`).appendChild(messageElement);
+        }
+        messageElement.innerHTML = message;
     }
     
 
@@ -37,48 +58,60 @@
 <div>
     <div id="lensLanguage_a" class="category lensLanguage_a">
         <h3 class="main-name">镜头语言：</h3>
-        <input type="text" name="lensLanguage_a" id="lensLanguage_a">
-        <button class="add-option" onclick="addOption('lensLanguage_a')">添加</button>
+        <div class="add-button">
+            <input type="text" name="lensLanguage_a" id="lensLanguage_a" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('lensLanguage_a')">添加</button>
+        </div>
         <div id="lensLanguage_a-detail"></div>
     </div>
     <hr/>
 
     <div id="lighting" class="category lighting">
         <h3 class="main-name">光影：</h3>
-        <input type="text" name="lighting" id="lighting">
-        <button class="add-option" onclick="addOption('lighting')">添加</button>
+        <div class="add-button">
+            <input type="text" name="lighting" id="lighting" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('lighting')">添加</button>
+        </div>
         <div id="lighting-detail"></div>
     </div>
     <hr/>
 
     <div id="subject" class="category subject">
         <h3 class="main-name">主体 (主体描述)：</h3>
-        <input type="text" name="subject" id="subject">
-        <button class="add-option" onclick="addOption('subject')">添加</button>
+        <div class="add-button">
+            <input type="text" name="subject" id="subject" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('subject')">添加</button>
+        </div>
         <div id="subject-detail"></div>
     </div>
     <hr/>
 
     <div id="action" class="category action">
         <h3 class="main-name">主体运动：</h3>
-        <input type="text" name="action" id="action">
-        <button class="add-option" onclick="addOption('action')">添加</button>
+        <div class="add-button">
+            <input type="text" name="action" id="action" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('action')">添加</button>
+        </div>
         <div id="action-detail"></div>
     </div>
     <hr/>
 
     <div id="scene" class="category scene">
         <h3 class="main-name">场景 (场景描述)：</h3>
-        <input type="text" name="scene" id="scene">
-        <button class="add-option" onclick="addOption('scene')">添加</button>
+        <div class="add-button">
+            <input type="text" name="scene" id="scene" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('scene')">添加</button>
+        </div>
         <div id="scene-detail"></div>
     </div>
     <hr/>
 
     <div id="atmosphere" class="category atmosphere">
         <h3 class="main-name">氛围：</h3>
-        <input type="text" name="atmosphere" id="atmosphere">
-        <button class="add-option" onclick="addOption('atmosphere')">添加</button>
+        <div class="add-button">
+            <input type="text" name="atmosphere" id="atmosphere" class="glowing-input">
+            <button class="add-option glowing-button" onclick="addOption('atmosphere')">添加</button>
+        </div>
         <div id="atmosphere-detail"></div>
     </div>
     <hr/>
@@ -119,11 +152,48 @@
 </script>
 
 <style>
+    body {
+        background-color: black;
+    }
     .main-name{
         color: rgb(206, 240, 17);
+        text-shadow: 0 0 10px rgba(206, 240, 17, 0.8);
     }
     .prompt-name{
-        color: rgb(139, 21, 168)
+        color: rgb(139, 21, 168);
+        text-shadow: 0 0 10px rgba(139, 21, 168, 0.8);
+    }
+    .glowing-input {
+        height: 20px;
+        border: none;
+        padding: 10px;
+        font-size: 16px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.5);
+        outline: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(206, 240, 17, 0.8);
+    }
+    .glowing-input:focus {
+        box-shadow: 0 0 20px rgba(206, 240, 17, 1);
+    }
+    .add-button {
+        display: flex;
+        align-items: center;
+        gap: 10px; /* 间距 */
+        margin-bottom: 10px; /* 下边距 */
+    }
+    .glowing-button {
+        border: none;
+        padding: 10px 20px;
+        font-size: 20px;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        outline: none;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(139, 21, 168, 0.8);
+        transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
     #lensLanguage_a-detail{
         margin-top: 20px;
@@ -136,6 +206,7 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #lighting-detail{
         margin-top: 20px;
@@ -148,6 +219,7 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #subject-detail{
         margin-top: 20px;
@@ -160,6 +232,7 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #action-detail{
         margin-top: 20px;
@@ -172,6 +245,7 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #scene-detail{
         margin-top: 20px;
@@ -184,6 +258,7 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #atmosphere-detail{
         margin-top: 20px;
@@ -196,10 +271,12 @@
         border: solid 1px aqua;
         display: inline-block;
         cursor: pointer;
+        text-shadow: 0 0 10px aqua;
     }
     #prompt{
         margin-top: 20px;
         color: rgb(6, 240, 76);
+        text-shadow: 0 0 10px rgba(6, 240, 76, 0.8);
     }
 </style>
 
