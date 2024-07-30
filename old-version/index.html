@@ -51,6 +51,9 @@
         messageElement.innerHTML = message;
     }
     
+    function clearMessage() {
+        document.getElementById('prompt').innerHTML = ""
+    }
 
 </script>
 <!-- <button onclick="saveData()">点击</button> -->
@@ -122,6 +125,8 @@
 <div>
     <h3 class="prompt-name">提示词：</h3>
     <div id="prompt"></div>
+    <br/>
+    <button class="add-option glowing-button" onclick="clearMessage()">清空</button>
 </div>
 
 </body>
